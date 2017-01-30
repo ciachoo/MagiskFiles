@@ -18,7 +18,7 @@ git clone git@github.com:topjohnwu/MagiskManager.git
 function signapp() {
 	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
-		java -jar MagiskFiles/Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v3.0-${suffix}.apk
+		java -jar MagiskFiles/Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 		rm -f MagiskManager/app/build/outputs/apk/${APKFILE}
 		echo "Done!"
 	else
