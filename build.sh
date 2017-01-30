@@ -4,8 +4,7 @@
 APKFILE=app-debug.apk
 CMP="diff --quiet remotes/origin/HEAD"
 MAGISKVER='11'
-MAGISKMANVER='4.0'
-
+MAGISKMANVER='3.1'
 suffix="$(date +%y%m%d)"
 
 function setup() {
@@ -18,7 +17,7 @@ git clone git@github.com:topjohnwu/MagiskManager.git
 function signapp() {
 	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
-		java -jar MagiskFiles/Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
+		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 		rm -f MagiskManager/app/build/outputs/apk/${APKFILE}
 		echo "Done!"
 	else
@@ -65,11 +64,8 @@ case $1 in
 	else
 		echo "MagiskManager:	no new commits!"
 	fi
-	[ ! -d MagiskFiles ] && mkdir -p MagiskFiles
-	mv -f Magisk*.zip MagiskFiles/ >/dev/null 2>&1
-	mv -f Magisk*.apk MagiskFiles/ >/dev/null 2>&1
 	if [ -n "$updates" ]; then
-		echo -e -n "Pushing new files to github.com/stangri...	" && git -C MagiskFiles add . && git -C MagiskFiles commit -m "$suffix build" >/dev/null 2>&1 && git -C MagiskFiles push origin >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+		echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
 	fi
 	;;
 esac

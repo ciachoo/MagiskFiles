@@ -1,0 +1,6 @@
+[submodule "Magisk"]
+	path = Magisk
+	url = git@github.com:topjohnwu/Magisk.git
+[submodule "MagiskManager"]
+	path = MagiskManager
+	url = git@github.com:topjohnwu/MagiskManager.git
