@@ -33,9 +33,9 @@ case $1 in
 	setup)
 #		(cd Magisk; git submodule init; git submodule update;)
 #		(cd MagiskManager; git submodule init; git submodule update;)
-		git rm -r Magisk >/dev/null 2>&1
+		rm -rf Magisk >/dev/null 2>&1
 		git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
-		git rm -r MagiskManager >/dev/null 2>&1
+		rm -rf MagiskManager >/dev/null 2>&1
 		git clone git@github.com:topjohnwu/MagiskManager.git
 		;;
 	sign)
@@ -44,7 +44,8 @@ case $1 in
 		git -C Magisk fetch
 		if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
 			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
-			git submodule update --recursive --remote
+			git -C Magisk submodule update --remote jni/su
+#			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
 			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { echo "Done!"; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || echo "FAIL!"
