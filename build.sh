@@ -74,5 +74,5 @@ case $1 in
 	;;
 esac
 
-end=`date +%s.%N`; runtime=$(echo "$end - $start" | bc -l); secs=$(printf %.f $runtime);
+end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
 echo -e -n "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
