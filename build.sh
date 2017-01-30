@@ -33,41 +33,41 @@ function editfiles() {
 start=$(date +%s.%N)
 
 case $1 in
+	cleanup)
+		git -C Magisk reset --hard HEAD >/dev/null 2>&1
+		git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
+		;;
 	setup)
-		setup;;
+		(cd Magisk; git submodule init; git submodule update;)
+		(cd MagiskManager; git submodule init; git submodule update;)
+		;;
 	sign)
 		signapp;;
-	   *)
-	if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
-		[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
-		echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-		cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1; cd ..;
-		[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { echo "Done!"; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || echo "FAIL!"
-		updates=1
-	else
-		echo "Magisk:		no new commits!"
-	fi
-
-	git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
-	if ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then
-		[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
-		echo -e -n "Editing  MagiskManager/app/build.gradle...	" && (editfiles) && echo "Done!" || echo "FAIL!"
-		echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-		cd MagiskManager
-		./gradlew clean >/dev/null 2>&1
-		./gradlew init >/dev/null 2>&1
-		./gradlew build -x lint >/dev/null 2>&1
-		cd ..
-		[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
-		git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
-		updates=1
-	else
-		echo "MagiskManager:	no new commits!"
-	fi
-	if [ -n "$updates" ]; then
-		echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
-	fi
-	;;
+	*)
+		if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
+			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
+			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
+			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
+			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { echo "Done!"; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || echo "FAIL!"
+			updates=1
+		else
+			echo "Magisk:		no new commits!"
+		fi
+		if ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then
+			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
+			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && (editfiles) && echo "Done!" || echo "FAIL!"
+			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
+			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint >/dev/null 2>&1;)
+			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
+			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
+			updates=1
+		else
+			echo "MagiskManager:	no new commits!"
+		fi
+		if [ -n "$updates" ]; then
+			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+		fi
+		;;
 esac
 
 end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
