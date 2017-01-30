@@ -7,13 +7,6 @@ MAGISKVER='11'
 MAGISKMANVER='3.1'
 suffix="$(date +%y%m%d)"
 
-function setup() {
-rm -rf Magisk
-git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
-rm -rf MagiskManager
-git clone git@github.com:topjohnwu/MagiskManager.git
-}
-
 function signapp() {
 	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
@@ -38,8 +31,12 @@ case $1 in
 		git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 		;;
 	setup)
-		(cd Magisk; git submodule init; git submodule update;)
-		(cd MagiskManager; git submodule init; git submodule update;)
+#		(cd Magisk; git submodule init; git submodule update;)
+#		(cd MagiskManager; git submodule init; git submodule update;)
+		git rm -r Magisk >/dev/null 2>&1
+		git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
+		git rm -r MagiskManager >/dev/null 2>&1
+		git clone git@github.com:topjohnwu/MagiskManager.git
 		;;
 	sign)
 		signapp;;
