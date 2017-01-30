@@ -41,6 +41,7 @@ case $1 in
 	sign)
 		signapp;;
 	*)
+		git -C Magisk fetch
 		if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
 			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
@@ -50,6 +51,7 @@ case $1 in
 		else
 			echo "Magisk:		no new commits!"
 		fi
+		git -C MagiskManager fetch
 		if ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then
 			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
 			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && (editfiles) && echo "Done!" || echo "FAIL!"
