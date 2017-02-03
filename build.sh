@@ -4,7 +4,7 @@
 APKFILE=app-debug.apk
 CMP="diff --quiet remotes/origin/HEAD"
 MAGISKVER='11'
-MAGISKMANVER='3.1'
+MAGISKMANVER='4.0'
 suffix="$(date +%y%m%d)"
 
 function signapp() {
