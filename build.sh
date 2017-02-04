@@ -63,7 +63,7 @@ case $1 in
 			echo "MagiskManager:	no new commits!"
 		fi
 		if [ -n "$updates" ]; then
-			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git pull && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
 		fi
 		;;
 esac
