@@ -7,7 +7,7 @@ MAGISKVER='11'
 MAGISKMANVER='4.0'
 suffix="$(date +%y%m%d)"
 
-function signapp() {
+signapp() {
 	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
 		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
@@ -18,10 +18,7 @@ function signapp() {
 	fi
 }
 
-function editfiles() {
-	return $(sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
-		sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java)
-}
+editfiles() { ( sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java ) && return 0 || return 1; }
 
 start=$(date +%s.%N)
 
@@ -58,7 +55,7 @@ case $1 in
 			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
 			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && (editfiles) && echo "Done!" || echo "FAIL!"
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint >/dev/null 2>&1;)
+			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1
@@ -66,7 +63,7 @@ case $1 in
 			echo "MagiskManager:	no new commits!"
 		fi
 		if [ -n "$updates" ]; then
-			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git pull && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
 		fi
 		;;
 esac
