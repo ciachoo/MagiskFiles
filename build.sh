@@ -18,10 +18,7 @@ function signapp() {
 	fi
 }
 
-function editfiles() {
-	return $(sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
-		sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java)
-}
+function editfiles() { ( sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java ) && return 0 || return 1; }
 
 start=$(date +%s.%N)
 
@@ -56,9 +53,9 @@ case $1 in
 		git -C MagiskManager fetch
 		if ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then
 			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
-			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && (editfiles) && echo "Done!" || echo "FAIL!"
+			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && editfiles && echo "Done!" || echo "FAIL!"
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint >/dev/null 2>&1;)
+			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1
