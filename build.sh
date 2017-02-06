@@ -41,7 +41,7 @@ case $1 in
 		git -C Magisk fetch
 		if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
 			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
-			git -C Magisk submodule update --remote jni/su
+#			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
@@ -55,7 +55,7 @@ case $1 in
 			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
 			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && editfiles && echo "Done!" || echo "FAIL!"
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false >/dev/null 2>&1;)
+			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false -Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1
