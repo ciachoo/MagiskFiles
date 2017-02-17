@@ -3,8 +3,8 @@
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
 CMP="diff --quiet remotes/origin/HEAD"
-MAGISKVER='11'
-MAGISKMANVER='4.0'
+MAGISKVER='12'
+MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
 
 editfiles() { ( sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java ) && return 0 || return 1; }
