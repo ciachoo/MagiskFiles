@@ -7,7 +7,36 @@ MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
 
-editfiles() { ( sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && sed  -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java ) && return 0 || return 1; }
+editfiles() { 
+sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
+sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
+sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
+
+# https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
+
+update_updates() {
+cat << EOF > updates/magisk_update.json
+{
+  "app": {
+    "version": "$MAGISKMANVER-$suffix",
+    "versionCode": "$MAGISKMANVER-$suffix",
+    "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-$MAGISKMANVER-$suffix.apk",
+    "changelog": "Check the link"
+    "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
+  },
+  "magisk": {
+    "versionCode": "$MAGISKMANVER-$suffix",
+    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.apk",
+    "changelog": "Check the link",
+    "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
+  },
+  "uninstall": {
+    "filename": "Magisk-uninstaller-20170206.zip",
+    "link": "http://tiny.cc/latestuninstaller"
+  }
+}
+EOF
+}
 
 signapp() {
 	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
@@ -62,8 +91,11 @@ case $1 in
 		else
 			echo "MagiskManager:	no new commits!"
 		fi
+
 		if [ -n "$updates" ]; then
-			echo -e -n "Pushing new files to github.com/stangri...	" && git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+			echo -e -n "Updating 'magisk_update.json' file...	    " && update_updates && echo "Done!" || echo "FAIL!"
+			echo -e -n "Pushing new files to github.com/stangri...	"
+			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
 		fi
 		;;
 esac
