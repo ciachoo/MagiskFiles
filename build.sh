@@ -8,7 +8,7 @@ MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
 
 editfiles() { 
-sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
+sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/raw/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
 sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
 sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
