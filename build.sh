@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "${0%/*}"
+
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
 CMP="diff --quiet remotes/origin/HEAD"
@@ -93,7 +95,7 @@ case $1 in
 		fi
 
 		if [ -n "$updates" ]; then
-			echo -e -n "Updating 'magisk_update.json' file...	    " && update_updates && echo "Done!" || echo "FAIL!"
+			echo -e -n "Updating 'magisk_update.json' file...		" && update_updates && echo "Done!" || echo "FAIL!"
 			echo -e -n "Pushing new files to github.com/stangri...	"
 			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
 		fi
