@@ -9,6 +9,9 @@ MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
 
+ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
+fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
+
 editfiles() { 
 sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
 sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
@@ -45,9 +48,9 @@ signapp() {
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
 		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 		rm -f MagiskManager/app/build/outputs/apk/${APKFILE}
-		echo "Done!"
+		ok
 	else
-		echo "FAIL!"
+		fail
 	fi
 }
 
@@ -69,25 +72,29 @@ case $1 in
 	sign)
 		signapp;;
 	*)
-		git -C Magisk fetch
-		if ! git -C Magisk ${CMP} || [ -n "$1" ]; then
-			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules; }
+
+		echo -n "Checking for Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+
+		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then echo "Updates found!"; rebuild=1; fi
+		if [ -n "$1" ]; then echo "Forced rebuild!"; rebuild=1; fi
+
+		if [ -n "$rebuild" ]; then
+			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules >/dev/null 2>&1 ; }
 #			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
-			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { echo "Done!"; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || echo "FAIL!"
+			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
 			updates=1
 		else
 			echo "Magisk:		no new commits!"
 		fi
-		git -C MagiskManager fetch
-		if ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then
-			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules; }
-			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && editfiles && echo "Done!" || echo "FAIL!"
+		if [ -n "$rebuild" ]; then
+			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1 ; }
+			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && editfiles && ok || fail
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false -Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home >/dev/null 2>&1;)
-			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { echo "Done!"; signapp; } || echo "FAIL!"
+			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1
 		else
@@ -95,9 +102,9 @@ case $1 in
 		fi
 
 		if [ -n "$updates" ]; then
-			echo -e -n "Updating 'magisk_update.json' file...		" && update_updates && echo "Done!" || echo "FAIL!"
+			echo -e -n "Updating 'magisk_update.json' file...		" && update_updates && ok || fail
 			echo -e -n "Pushing new files to github.com/stangri...	"
-			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && echo "Done!" || echo "FAIL!"
+			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin -f >/dev/null 2>&1 && ok || fail
 		fi
 		;;
 esac
