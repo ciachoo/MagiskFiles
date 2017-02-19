@@ -1,14 +1,14 @@
 {
   "app": {
-    "version": "5.0-170218",
-    "versionCode": "5.0-170218",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-5.0-170218.apk",
+    "version": "5.0-170219",
+    "versionCode": "5.0-170219",
+    "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-5.0-170219.apk",
     "changelog": "Check the link"
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "magisk": {
-    "versionCode": "5.0-170218",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v12-170218.apk",
+    "versionCode": "5.0-170219",
+    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v12-170219.apk",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
