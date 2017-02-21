@@ -1,5 +1,4 @@
 #!/bin/bash
-PATH=/usr/local/bin:/usr/local/sbin:~/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 cd "${0%/*}"
 
@@ -57,7 +56,7 @@ signapp() {
 }
 
 checkorigin() {
-if git ${CMP}; then 
+if ! git ${CMP}; then 
 	echo "Update to the origin repository found! Please re-run build script after update."
 	echo "Updating local files from origin repository... "
 	git fetch && git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && ok || fail
@@ -89,15 +88,18 @@ case $1 in
 #		checkorigin
 		echo -n "Checking for Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
-		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then echo "Updates found!"; rebuild=1; fi
-		if [ -n "$1" ]; then echo "Forced rebuild!"; rebuild=1; fi
+		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
+			echo "Updates found!"; rebuild=1; 
+		else
+			[ -n "$1" ] && { echo "Forced rebuild!"; rebuild=1; }
+		fi
 
 		if [ -n "$rebuild" ]; then
 			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules >/dev/null 2>&1 ; }
 #			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix})
+			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
 			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
 			updates=1
 		else
