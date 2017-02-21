@@ -4,7 +4,7 @@ cd "${0%/*}"
 
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
-CMP="diff --quiet remotes/origin/HEAD"
+CMP="diff --quiet --ignore-submodules=dirty remotes/origin/HEAD"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
