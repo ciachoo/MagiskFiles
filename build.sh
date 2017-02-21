@@ -1,4 +1,5 @@
 #!/bin/bash
+PATH=/usr/local/bin:/usr/local/sbin:~/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 cd "${0%/*}"
 
@@ -8,13 +9,14 @@ CMP="diff --quiet remotes/origin/HEAD"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
+vercode="$(date +%-m%d)"
 
 ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
 editfiles() { 
 sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
-sed -i '' "s/versionName \".*\"/versionName \"$MAGISKMANVER-$suffix\"/" MagiskManager/app/build.gradle && \
+sed -i '' "s/versionName \".*\"/versionName \"${MAGISKMANVER%%.*}.${vercode}\"/" MagiskManager/app/build.gradle && \
 sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
@@ -23,15 +25,15 @@ update_updates() {
 cat << EOF > updates/magisk_update.json
 {
   "app": {
-    "version": "$MAGISKMANVER-$suffix",
-    "versionCode": "$MAGISKMANVER-$suffix",
+    "version": "${MAGISKMANVER}-${vercode}",
+    "versionCode": "${MAGISKMANVER%%.*}.${vercode}",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-$MAGISKMANVER-$suffix.apk",
     "changelog": "Check the link"
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "magisk": {
-    "versionCode": "$MAGISKMANVER-$suffix",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.apk",
+    "versionCode": "${MAGISKVER%%.*}.{vercode}",
+    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
@@ -54,6 +56,17 @@ signapp() {
 	fi
 }
 
+checkorigin() {
+if git ${CMP}; then 
+	echo "Update to the origin repository found! Please re-run build script after update."
+	echo "Updating local files from origin repository... "
+	git fetch && git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && ok || fail
+	exit 0
+else
+	echo "No origin updates found."
+fi
+}
+
 start=$(date +%s.%N)
 
 case $1 in
@@ -73,6 +86,7 @@ case $1 in
 		signapp;;
 	*)
 
+#		checkorigin
 		echo -n "Checking for Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
 		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then echo "Updates found!"; rebuild=1; fi
