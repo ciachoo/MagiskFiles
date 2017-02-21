@@ -85,7 +85,7 @@ case $1 in
 		signapp;;
 	*)
 
-#		checkorigin
+		checkorigin
 		echo -n "Checking for Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
 		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
