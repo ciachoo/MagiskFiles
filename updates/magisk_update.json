@@ -1,13 +1,13 @@
 {
   "app": {
     "version": "5.0-221",
-    "versionCode": "5.221",
+    "versionCode": "5221",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-5.0-170221.apk",
     "changelog": "Check the link"
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "magisk": {
-    "versionCode": "12.221",
+    "versionCode": "12221",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v12-170221.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
