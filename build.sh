@@ -76,6 +76,7 @@ case $1 in
 	setup)
 #		(cd Magisk; git submodule init; git submodule update;)
 #		(cd MagiskManager; git submodule init; git submodule update;)
+		echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
 		rm -rf Magisk >/dev/null 2>&1
 		git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
 		rm -rf MagiskManager >/dev/null 2>&1
