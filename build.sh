@@ -25,13 +25,13 @@ cat << EOF > updates/magisk_update.json
 {
   "app": {
     "version": "${MAGISKMANVER}-${vercode}",
-    "versionCode": "${MAGISKMANVER%%.*}.${vercode}",
+    "versionCode": "${MAGISKMANVER%%.*}${vercode}",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-$MAGISKMANVER-$suffix.apk",
     "changelog": "Check the link"
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "magisk": {
-    "versionCode": "${MAGISKVER%%.*}.${vercode}",
+    "versionCode": "${MAGISKVER%%.*}${vercode}",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
