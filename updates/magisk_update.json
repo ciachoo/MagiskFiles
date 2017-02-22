@@ -1,13 +1,12 @@
 {
   "app": {
-    "version": "5.0-221",
-    "versionCode": "5221",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-5.0-170221.apk",
-    "changelog": "Check the link"
-    "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
+    "version": "stub",
+    "versionCode": "10",
+    "link": "https://github.com/topjohnwu/MagiskManager/releases/download/v3.0/MagiskManager-stub.apk",
+    "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
-    "versionCode": "12221",
+    "versionCode": "170211",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v12-170221.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
