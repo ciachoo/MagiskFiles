@@ -98,8 +98,8 @@ case $1 in
 #			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-			(cd Magisk; ./build.sh all ${MAGISKVER}-${suffix} >/dev/null 2>&1;)
-			[ -f Magisk/Magisk-v${MAGISKVER}-${suffix}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
+			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
+			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk/Magisk-v${MAGISKVER}-${suffix}.zip; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
 			updates=1
 		else
 			echo "Magisk:		no new commits!"
