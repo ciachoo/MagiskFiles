@@ -8,7 +8,6 @@ CMP="diff --quiet --ignore-submodules=dirty remotes/origin/HEAD"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
-vercode="$(date +%-m%d)"
 
 ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
@@ -24,14 +23,13 @@ update_updates() {
 cat << EOF > updates/magisk_update.json
 {
   "app": {
-    "version": "${MAGISKMANVER}-${vercode}",
-    "versionCode": "${MAGISKMANVER%%.*}${vercode}",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-$MAGISKMANVER-$suffix.apk",
-    "changelog": "Check the link"
-    "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
+    "version": "stub",
+    "versionCode": "10",
+    "link": "https://github.com/topjohnwu/MagiskManager/releases/download/v3.0/MagiskManager-stub.apk",
+    "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
-    "versionCode": "${MAGISKVER%%.*}${vercode}",
+    "versionCode": "${suffix}",
     "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
