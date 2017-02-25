@@ -64,6 +64,7 @@ signapp() {
 }
 
 checkorigin() {
+echo -n "Checking for origin updates...	"; git fetch >/dev/null 2>&1 && ok || fail
 if ! git ${CMP}; then 
 	echo "Update to the origin repository found! Please re-run build script after update."
 	echo "Updating local files from origin repository... "
@@ -95,7 +96,7 @@ case $1 in
 	*)
 
 		checkorigin
-		echo -n "Checking for Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+		echo -n "Checking for upstream Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
 		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
 			echo "Updates found!"; rebuild=1; 
