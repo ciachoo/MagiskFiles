@@ -1,3 +1,3 @@
-apkname=MagiskManager-v5.0-170221.apk
-lastest_version=170221
-download_url=https://github.com/stangri/MagiskFiles/raw/master/MagiskManager-v5.0-170221.apk
+apkname=MagiskManager-v5.0-170225.apk
+lastest_version=170225
+download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/$apkname
