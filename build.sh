@@ -69,6 +69,8 @@ if ! git ${CMP}; then
 	echo "Update to the origin repository found! Please re-run build script after update."
 	echo "Updating local files from origin repository... "
 	git fetch && git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && ok || fail
+	echo "Running build.sh again."
+	./build.sh
 	exit 0
 else
 	echo "No origin updates found."
