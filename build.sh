@@ -14,7 +14,7 @@ fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
 edit_magiskman_files() { 
 sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
-sed -i '' "s/versionName \".*\"/versionName \"${MAGISKMANVER%%.*}.${vercode}\"/" MagiskManager/app/build.gradle && \
+sed -i '' "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" MagiskManager/app/build.gradle && \
 sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
 
