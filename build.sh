@@ -4,7 +4,7 @@ cd "${0%/*}"
 
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
-CMP="diff --quiet --ignore-submodules=dirty remotes/origin/HEAD"
+CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
@@ -12,10 +12,13 @@ suffix="$(date +%y%m%d)"
 ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
-editfiles() { 
+edit_magiskman_files() { 
 sed -i '' "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
 sed -i '' "s/versionName \".*\"/versionName \"${MAGISKMANVER%%.*}.${vercode}\"/" MagiskManager/app/build.gradle && \
 sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
+
+
+edit_magisk_files() { sed -i '' "s|--extract|--unpack|" Magisk/scripts/flash_script.sh; }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
@@ -109,16 +112,18 @@ case $1 in
 			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules >/dev/null 2>&1 ; }
 #			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
+			echo -e -n "Editing  Magisk files...	" && edit_magisk_files && ok || fail
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
 			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk/Magisk-v${MAGISKVER}-${suffix}.zip; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
+			git -C Magisk reset --hard HEAD >/dev/null 2>&1
 			updates=1
 		else
 			echo "Magisk:		no new commits!"
 		fi
 		if [ -n "$rebuild" ]; then
 			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1 ; }
-			echo -e -n "Editing  MagiskManager/app/build.gradle...	" && editfiles && ok || fail
+			echo -e -n "Editing  MagiskManager files...	" && edit_magiskman_files && ok || fail
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false -Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
