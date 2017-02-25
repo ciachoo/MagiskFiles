@@ -30,7 +30,7 @@ cat << EOF > updates/magisk_update.json
   },
   "magisk": {
     "versionCode": "${suffix}",
-    "link": "https://github.com/stangri/MagiskFiles/raw/master/Magisk-v$MAGISKVER-$suffix.zip",
+    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${suffix}.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
@@ -39,6 +39,16 @@ cat << EOF > updates/magisk_update.json
     "link": "http://tiny.cc/latestuninstaller"
   }
 }
+EOF
+
+cat << EOF > updates/magisk_manager_update.txt
+apkname=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
+lastest_version=${suffix}
+download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/\$apkname
+EOF
+
+cat << EOF > magisk_manager_version.txt
+version=${suffix}
 EOF
 }
 
