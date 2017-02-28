@@ -46,13 +46,9 @@ EOF
 
 if [ "$apk_update" == 1 ]; then
 cat << EOF > updates/magisk_manager_update.txt
-apkname=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 lastest_version=${suffix}
-download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/\$apkname
-EOF
-
-cat << EOF > magisk_manager_version.txt
-version=${suffix}
+apk_file=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
+download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/\$apk_file
 EOF
 fi
 }
