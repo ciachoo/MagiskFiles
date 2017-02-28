@@ -44,6 +44,7 @@ cat << EOF > updates/magisk_update.json
 }
 EOF
 
+if [ "$apk_update" == 1 ]; then
 cat << EOF > updates/magisk_manager_update.txt
 apkname=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 lastest_version=${suffix}
@@ -53,6 +54,7 @@ EOF
 cat << EOF > magisk_manager_version.txt
 version=${suffix}
 EOF
+fi
 }
 
 signapp() {
@@ -129,12 +131,13 @@ case $1 in
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1
+			apk_update=1
 		else
 			echo "MagiskManager:	no new commits!"
 		fi
 
 		if [ -n "$updates" ]; then
-			echo -e -n "Updating 'magisk_update.json' file...		" && update_updates && ok || fail
+			echo -e -n "Updating update files...		" && update_updates && ok || fail
 			echo -e -n "Pushing new files to github.com/stangri...	"
 			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && ok || fail
 		fi
