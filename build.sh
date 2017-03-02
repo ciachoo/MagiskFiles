@@ -23,6 +23,7 @@ edit_magisk_files() { sed -i '' "s|--extract|--unpack|" Magisk/scripts/flash_scr
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
 update_updates() {
+if [ -f $Magisk-v${MAGISKVER}-${suffix}.zip ]; then
 cat << EOF > updates/magisk_update.json
 {
   "app": {
@@ -43,8 +44,9 @@ cat << EOF > updates/magisk_update.json
   }
 }
 EOF
+fi
 
-if [ "$apk_update" == 1 ]; then
+if [ -f $MagiskManager-v${MAGISKMANVER}-${suffix}.apk ]; then
 cat << EOF > updates/magisk_manager_update.txt
 lastest_version=${suffix}
 apk_file=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
@@ -126,8 +128,8 @@ case $1 in
 			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false -Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
-			updates=1
-			apk_update=1
+			updates=1			
+#apk_update=1
 		else
 			echo "MagiskManager:	no new commits!"
 		fi
