@@ -23,7 +23,7 @@ edit_magisk_files() { sed -i '' "s|--extract|--unpack|" Magisk/scripts/flash_scr
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
 update_updates() {
-if [ -f $Magisk-v${MAGISKVER}-${suffix}.zip ]; then
+if [ -f Magisk-v${MAGISKVER}-${suffix}.zip ]; then
 cat << EOF > updates/magisk_update.json
 {
   "app": {
@@ -46,7 +46,7 @@ cat << EOF > updates/magisk_update.json
 EOF
 fi
 
-if [ -f $MagiskManager-v${MAGISKMANVER}-${suffix}.apk ]; then
+if [ -f MagiskManager-v${MAGISKMANVER}-${suffix}.apk ]; then
 cat << EOF > updates/magisk_manager_update.txt
 lastest_version=${suffix}
 apk_file=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
