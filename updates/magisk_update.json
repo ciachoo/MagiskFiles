@@ -6,8 +6,8 @@
     "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
-    "versionCode": "170305",
-    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v12-170305.zip",
+    "versionCode": "170308",
+    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v12-170308.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
