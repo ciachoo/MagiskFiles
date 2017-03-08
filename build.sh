@@ -1,6 +1,8 @@
 #!/bin/bash
 
 cd "${0%/*}"
+export GIT_EDITOR=true
+export GIT_MERGE_AUTOEDIT=no
 
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
@@ -70,7 +72,7 @@ checkorigin() {
 echo -n "Checking for origin updates...	"; git fetch >/dev/null 2>&1 && ok || fail
 if ! git ${CMP}; then 
 	echo "Updating local files from origin repository... "
-	git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && ok || fail
+	git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && git push origin master && ok || fail
 	echo "Running build.sh again."
 	./build.sh
 	exit 0
