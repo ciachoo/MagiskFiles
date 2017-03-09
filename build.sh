@@ -20,7 +20,12 @@ sed -i '' "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" Magi
 sed -i '' "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
 
-edit_magisk_files() { sed -i '' "s|--extract|--unpack|" Magisk/scripts/flash_script.sh; }
+edit_magisk_files() { 
+sed -i '' "s|--extract|--unpack|" Magisk/scripts/flash_script.sh && \
+sed -i '' "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable; } && \
+sed -i '' "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
+sed -i '' "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
+sed -i '' "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
