@@ -126,7 +126,7 @@ case $1 in
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Editing  Magisk files...	" && edit_magisk_files && ok || fail
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
+			(cd Magisk; ./build.sh all ${suffix};)
 			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk/Magisk-v${MAGISKVER}-${suffix}.zip; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
 			git -C Magisk reset --hard HEAD >/dev/null 2>&1
 			updates=1
