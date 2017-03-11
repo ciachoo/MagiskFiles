@@ -15,20 +15,22 @@ ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
 edit_magiskman_files() { 
-sed -i "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
-sed -i "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" MagiskManager/app/build.gradle && \
-sed -i "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
+sed '' -i "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
+sed '' -i "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" MagiskManager/app/build.gradle && \
+sed '' -i "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
 
 edit_magisk_files() { 
-sed -i "s|bootimgtools|magiskboot|" Magisk/scripts/flash_script.sh && \
-sed -i "s|bootimgtools|magiskboot|" Magisk/scripts/magisk_uninstaller.sh && \
-sed -i "s|--extract|--unpack|" Magisk/scripts/flash_script.sh && \
-sed -i "s|--extract|--unpack|" Magisk/scripts/magisk_uninstaller.sh && \
-sed -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable && \
-sed -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
-sed -i "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
-sed -i "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
+sed '' -i "s|bootimgtools|magiskboot|" Magisk/build.sh && \
+sed '' -i "s|bootimgtools|magiskboot|" Magisk/scripts/flash_script.sh && \
+sed '' -i "s|bootimgtools|magiskboot|" Magisk/scripts/magisk_uninstaller.sh && \
+sed '' -i "s|--extract|--unpack|" Magisk/scripts/flash_script.sh && \
+sed '' -i "s|--extract|--unpack|" Magisk/scripts/magisk_uninstaller.sh && \
+sed '' -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable && \
+sed '' -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
+sed '' -i "s|\$\"DUMMDIR|\"\$DUMMDIR|" Magisk/scripts/magic_mask.sh && \
+sed '' -i "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
+sed '' -i "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
@@ -101,15 +103,15 @@ case $1 in
 #		(cd MagiskManager; git submodule init; git submodule update;)
 		echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
 		rm -rf Magisk >/dev/null 2>&1
-		git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
+		git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
 		rm -rf MagiskManager >/dev/null 2>&1
-		git clone https://github.com/topjohnwu/MagiskManager.git
+		git clone git@github.com:topjohnwu/MagiskManager.git
 		;;
 	sign)
 		signapp;;
 	*)
 
-		#checkorigin
+		checkorigin
 		echo -n "Checking for upstream Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
 		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
@@ -124,7 +126,7 @@ case $1 in
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Editing  Magisk files...	" && edit_magisk_files && ok || fail
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-			(cd Magisk; ./build.sh all ${suffix};)
+			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
 			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk/Magisk-v${MAGISKVER}-${suffix}.zip; mv Magisk/Magisk-v${MAGISKVER}-${suffix}.zip .; } || fail
 			git -C Magisk reset --hard HEAD >/dev/null 2>&1
 			updates=1
