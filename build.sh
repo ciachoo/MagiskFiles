@@ -10,27 +10,23 @@ CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
+[[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed '' -i" || repl_command="sed -i"
 
 ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
 edit_magiskman_files() { 
-sed '' -i "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
-sed '' -i "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" MagiskManager/app/build.gradle && \
-sed '' -i "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
+$repl_command "s|topjohnwu/MagiskManager|stangri/MagiskFiles/master|" MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
+$repl_command "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${suffix}\"/" MagiskManager/app/build.gradle && \
+$repl_command "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
 
 edit_magisk_files() { 
-sed '' -i "s|bootimgtools|magiskboot|" Magisk/build.sh && \
-sed '' -i "s|bootimgtools|magiskboot|" Magisk/scripts/flash_script.sh && \
-sed '' -i "s|bootimgtools|magiskboot|" Magisk/scripts/magisk_uninstaller.sh && \
-sed '' -i "s|--extract|--unpack|" Magisk/scripts/flash_script.sh && \
-sed '' -i "s|--extract|--unpack|" Magisk/scripts/magisk_uninstaller.sh && \
-sed '' -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable && \
-sed '' -i "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
-sed '' -i "s|\$\"DUMMDIR|\"\$DUMMDIR|" Magisk/scripts/magic_mask.sh && \
-sed '' -i "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
-sed '' -i "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
+$repl_command "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable && \
+$repl_command "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
+$repl_command "s|\$\"DUMMDIR|\"\$DUMMDIR|" Magisk/scripts/magic_mask.sh && \
+$repl_command "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
+$repl_command "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
