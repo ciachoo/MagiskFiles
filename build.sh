@@ -100,9 +100,9 @@ case $1 in
 #		(cd MagiskManager; git submodule init; git submodule update;)
 		echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
 		rm -rf Magisk >/dev/null 2>&1
-		git clone --recursive -j8 git@github.com:topjohnwu/Magisk.git
+		git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
 		rm -rf MagiskManager >/dev/null 2>&1
-		git clone git@github.com:topjohnwu/MagiskManager.git
+		git clone https://github.com/topjohnwu/MagiskManager.git
 		;;
 	sign)
 		signapp;;
