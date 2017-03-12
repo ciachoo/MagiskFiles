@@ -65,7 +65,7 @@ fi
 }
 
 signapp() {
-	echo -e -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
+	echo -n "Signing  MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
 		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 		rm -f MagiskManager/app/build/outputs/apk/${APKFILE}
@@ -76,9 +76,9 @@ signapp() {
 }
 
 checkorigin() {
-echo -n "Checking for origin updates...	"; git fetch >/dev/null 2>&1 && ok || fail
+echo -n "Checking for origin updates...			"; git fetch >/dev/null 2>&1 && ok || fail
 if ! git ${CMP}; then 
-	echo "Updating local files from origin repository... "
+	echo -n "Updating local files from origin repo...	"
 	git pull origin master && git reset --hard HEAD >/dev/null 2>&1 && git push origin master && ok || fail
 	echo "Running build.sh again."
 	./build.sh
@@ -89,6 +89,7 @@ fi
 }
 
 start=$(date +%s.%N)
+[ "$1" == "-i" ] && { ignore_origin=1; shift; }
 
 case $1 in
 	cleanup)
@@ -107,8 +108,8 @@ case $1 in
 	sign)
 		signapp;;
 	*)
-		checkorigin
-		echo -n "Checking for upstream Magisk/MagiskManager updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+		[ -z "$ignore_origin" ] && checkorigin
+		echo -n "Checking for @topjohnwu updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
 		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
 			echo "Updates found!"; rebuild=1; 
@@ -125,7 +126,7 @@ case $1 in
 				git -C Magisk submodule update --recursive >/dev/null 2>&1
 #				git -C Magisk submodule update --recursive --remote
 			fi
-			echo -e -n "Editing  Magisk files...	" && edit_magisk_files && ok || fail
+			echo -e -n "Editing  Magisk files...			" && edit_magisk_files && ok || fail
 			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
 			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
@@ -142,7 +143,7 @@ case $1 in
 				git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1
 				git -C MagiskManager submodule update --recursive >/dev/null 2>&1
 			fi
-			echo -e -n "Editing  MagiskManager files...	" && edit_magiskman_files && ok || fail
+			echo -e -n "Editing  MagiskManager files...			" && edit_magiskman_files && ok || fail
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false $gradle_param >/dev/null 2>&1;)
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
@@ -154,7 +155,7 @@ case $1 in
 		fi
 
 		if [ -n "$updates" ]; then
-			echo -e -n "Updating update files...		" && update_updates && ok || fail
+			echo -e -n "Updating update files...			" && update_updates && ok || fail
 			echo -e -n "Pushing new files to github.com/stangri...	"
 			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && ok || fail
 		fi
