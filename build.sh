@@ -10,7 +10,7 @@ CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
 MAGISKVER='12'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
-[[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed '' -i" || repl_command="sed -i"
+[[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed -i ''" || repl_command="sed -i"
 
 ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
