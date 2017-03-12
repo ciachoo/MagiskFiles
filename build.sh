@@ -117,7 +117,7 @@ case $1 in
 		fi
 
 		if [ -n "$rebuild" ]; then
-			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk pull --recurse-submodules >/dev/null 2>&1 ; }
+			[ -z "$1" ] && { echo "Magisk:		new commits found!"; git -C Magisk fetch >/dev/null 2>&1; git -c Magisk reset --hard origin/master >/dev/null 2>&1; git -C Magisk pull --recurse-submodules >/dev/null 2>&1; }
 #			git -C Magisk submodule update --remote jni/su
 #			git -C Magisk submodule update --recursive --remote
 			echo -e -n "Editing  Magisk files...	" && edit_magisk_files && ok || fail
@@ -130,7 +130,7 @@ case $1 in
 			echo "Magisk:		no new commits!"
 		fi
 		if [ -n "$rebuild" ]; then
-			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1 ; }
+			[ -z "$1" ] && { echo "MagiskManager:	new commits found!"; git -C MagiskManager fetch >/dev/null 2>&1; git -c MagiskManager reset --hard origin/master >/dev/null 2>&1; git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1 ; }
 			echo -e -n "Editing  MagiskManager files...	" && edit_magiskman_files && ok || fail
 			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
 			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false -Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home >/dev/null 2>&1;)
