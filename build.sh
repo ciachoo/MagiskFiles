@@ -97,8 +97,6 @@ case $1 in
 		git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 		;;
 	setup)
-#		(cd Magisk; git submodule init; git submodule update;)
-#		(cd MagiskManager; git submodule init; git submodule update;)
 		echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
 		rm -rf Magisk >/dev/null 2>&1
 		git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
@@ -109,16 +107,14 @@ case $1 in
 		signapp;;
 	*)
 		[ -z "$ignore_origin" ] && checkorigin
-		echo -n "Checking for @topjohnwu updates...	"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+		echo -n "Checking for @topjohnwu updates...		"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
 
-		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP}; then 
-			echo "Updates found!"; rebuild=1; 
-		else
-			[ -n "$1" ] && { echo "Forced rebuild!"; rebuild=1; }
+		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then 
+			rebuild=1; 
 		fi
 
 		if [ -n "$rebuild" ]; then
-			if [ -z "$1" ]; then
+			if [ -z "$1" ] && ! git -C Magisk ${CMP}; then
 				echo "Magisk:		new commits found!"
 				git -C Magisk fetch >/dev/null 2>&1
 				git -C Magisk reset --hard origin/master >/dev/null 2>&1
@@ -136,7 +132,7 @@ case $1 in
 			echo "Magisk:		no new commits!"
 		fi
 		if [ -n "$rebuild" ]; then
-			if [ -z "$1" ]; then
+			if [ -z "$1" ] && ! git -C MagiskManager ${CMP}; then
 				echo "MagiskManager:	new commits found!"
 				git -C MagiskManager fetch >/dev/null 2>&1
 				git -C MagiskManager reset --hard origin/master >/dev/null 2>&1
@@ -149,7 +145,6 @@ case $1 in
 			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 			updates=1			
-#apk_update=1
 		else
 			echo "MagiskManager:	no new commits!"
 		fi
