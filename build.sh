@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd "${0%/*}"
 export GIT_EDITOR=true
 export GIT_MERGE_AUTOEDIT=no
 
@@ -88,14 +87,14 @@ else
 fi
 }
 
-
 cleanup() {
-	cd "${0%/*}"
 	git -C Magisk reset --hard HEAD >/dev/null 2>&1
 	git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 }
 
 if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
+	
+	cd "${0%/*}"
     trap cleanup EXIT
 
 	start=$(date +%s.%N)
