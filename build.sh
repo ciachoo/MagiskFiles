@@ -32,7 +32,7 @@ $repl_command "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
 update_updates() {
-if [ -f Magisk-v${MAGISKVER}-${suffix}.zip ]; then
+	if [ -f Magisk-v${MAGISKVER}-${suffix}.zip ]; then
 cat << EOF > updates/magisk_update.json
 {
   "app": {
@@ -53,15 +53,15 @@ cat << EOF > updates/magisk_update.json
   }
 }
 EOF
-fi
+	fi
 
-if [ -f MagiskManager-v${MAGISKMANVER}-${suffix}.apk ]; then
+	if [ -f MagiskManager-v${MAGISKMANVER}-${suffix}.apk ]; then
 cat << EOF > updates/magisk_manager_update.txt
 lastest_version=${suffix}
 apk_file=MagiskManager-v${MAGISKMANVER}-${suffix}.apk
 download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/\$apk_file
 EOF
-fi
+	fi
 }
 
 signapp() {
@@ -88,74 +88,87 @@ else
 fi
 }
 
-start=$(date +%s.%N)
-[ "$1" == "-i" ] && { ignore_origin=1; shift; }
 
-case $1 in
-	cleanup)
-		git -C Magisk reset --hard HEAD >/dev/null 2>&1
-		git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
-		;;
-	setup)
-		echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
-		rm -rf Magisk >/dev/null 2>&1
-		git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
-		rm -rf MagiskManager >/dev/null 2>&1
-		git clone https://github.com/topjohnwu/MagiskManager.git
-		;;
-	sign)
-		signapp;;
-	*)
-		[ -z "$ignore_origin" ] && checkorigin
-		echo -n "Checking for @topjohnwu updates...		"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+cleanup() {
+	cd "${0%/*}"
+	git -C Magisk reset --hard HEAD >/dev/null 2>&1
+	git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
+}
 
-		if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then 
-			rebuild=1; 
-		fi
+if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
+    trap cleanup EXIT
 
-		if [ -n "$rebuild" ]; then
-			if [ -z "$1" ] && ! git -C Magisk ${CMP}; then
-				echo "Magisk:		new commits found!"
-				git -C Magisk fetch >/dev/null 2>&1
-				git -C Magisk reset --hard origin/master >/dev/null 2>&1
-				git -C Magisk pull --recurse-submodules >/dev/null 2>&1
-				git -C Magisk submodule update --recursive >/dev/null 2>&1
-#				git -C Magisk submodule update --recursive --remote
-			fi
-			echo -e -n "Editing  Magisk files...			" && edit_magisk_files && ok || fail
-			echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-			(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
-			[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
+	start=$(date +%s.%N)
+	[ "$1" == "-i" ] && { ignore_origin=1; shift; }
+	
+	case $1 in
+		cleanup)
 			git -C Magisk reset --hard HEAD >/dev/null 2>&1
-			updates=1
-		else
-			echo "Magisk:		no new commits!"
-		fi
-		if [ -n "$rebuild" ]; then
-			if [ -z "$1" ] && ! git -C MagiskManager ${CMP}; then
-				echo "MagiskManager:	new commits found!"
-				git -C MagiskManager fetch >/dev/null 2>&1
-				git -C MagiskManager reset --hard origin/master >/dev/null 2>&1
-				git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1
-				git -C MagiskManager submodule update --recursive >/dev/null 2>&1
-			fi
-			echo -e -n "Editing  MagiskManager files...			" && edit_magiskman_files && ok || fail
-			echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-			(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false $gradle_param >/dev/null 2>&1;)
-			[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 			git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
-			updates=1			
-		else
-			echo "MagiskManager:	no new commits!"
-		fi
+			;;
+		setup)
+			echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
+			rm -rf Magisk >/dev/null 2>&1
+			git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
+			rm -rf MagiskManager >/dev/null 2>&1
+			git clone https://github.com/topjohnwu/MagiskManager.git
+			;;
+		sign)
+			signapp;;
+		*)
+			[ -z "$ignore_origin" ] && checkorigin
+			echo -n "Checking for @topjohnwu updates...		"; git -C Magisk fetch >/dev/null 2>&1 && git -C MagiskManager fetch >/dev/null 2>&1 && ok || fail
+	
+			if ! git -C Magisk ${CMP} || ! git -C MagiskManager ${CMP} || [ -n "$1" ]; then 
+				rebuild=1; 
+			fi
+	
+			if [ -n "$rebuild" ]; then
+				if [ -z "$1" ] && ! git -C Magisk ${CMP}; then
+					echo "Magisk:		new commits found!"
+					git -C Magisk fetch >/dev/null 2>&1
+					git -C Magisk reset --hard origin/master >/dev/null 2>&1
+					git -C Magisk pull --recurse-submodules >/dev/null 2>&1
+					git -C Magisk submodule update --recursive >/dev/null 2>&1
+	#				git -C Magisk submodule update --recursive --remote
+				fi
+				echo -e -n "Editing  Magisk files...			" && edit_magisk_files && ok || fail
+				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
+				(cd Magisk; ./build.sh all ${suffix} >/dev/null 2>&1;)
+				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
+				git -C Magisk reset --hard HEAD >/dev/null 2>&1
+				updates=1
+			else
+				echo "Magisk:		no new commits!"
+			fi
+			if [ -n "$rebuild" ]; then
+				if [ -z "$1" ] && ! git -C MagiskManager ${CMP}; then
+					echo "MagiskManager:	new commits found!"
+					git -C MagiskManager fetch >/dev/null 2>&1
+					git -C MagiskManager reset --hard origin/master >/dev/null 2>&1
+					git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1
+					git -C MagiskManager submodule update --recursive >/dev/null 2>&1
+				fi
+				echo -e -n "Editing  MagiskManager files...			" && edit_magiskman_files && ok || fail
+				echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
+				(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false $gradle_param >/dev/null 2>&1;)
+				[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
+				git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
+				updates=1			
+			else
+				echo "MagiskManager:	no new commits!"
+			fi
+	
+			if [ -n "$updates" ]; then
+				echo -e -n "Updating update files...			" && update_updates && ok || fail
+				echo -e -n "Pushing new files to github.com/stangri...	"
+				git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && ok || fail
+			fi
+			;;
+	esac
+	
+	end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
+	echo -e -n "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
+	
+fi
 
-		if [ -n "$updates" ]; then
-			echo -e -n "Updating update files...			" && update_updates && ok || fail
-			echo -e -n "Pushing new files to github.com/stangri...	"
-			git add . && git commit -m "$suffix build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && ok || fail
-		fi
-		;;
-esac
-
-end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
-echo -e -n "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
