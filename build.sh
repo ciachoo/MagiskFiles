@@ -124,12 +124,13 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 	
 			if [ -n "$rebuild" ]; then
 				if [ -z "$1" ] && ! git -C Magisk ${CMP}; then
-					echo "Magisk:		new commits found!"
-					git -C Magisk fetch >/dev/null 2>&1
-					git -C Magisk reset --hard origin/master >/dev/null 2>&1
-					git -C Magisk pull --recurse-submodules >/dev/null 2>&1
-					git -C Magisk submodule update --recursive >/dev/null 2>&1
-	#				git -C Magisk submodule update --recursive --remote
+					echo -e -n "Updating Magisk...				" && s=0
+					git -C Magisk fetch >/dev/null 2>&1 || s=1
+					git -C Magisk reset --hard origin/master >/dev/null 2>&1 || s=1
+					git -C Magisk pull --recurse-submodules >/dev/null 2>&1 || s=1
+					git -C Magisk submodule update --recursive >/dev/null 2>&1 || s=1
+	#				git -C Magisk submodule update --recursive --remote || s=1
+					[ "$s" -eq "0" ] && ok || fail
 				fi
 				echo -e -n "Editing  Magisk files...			" && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
@@ -137,16 +138,17 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 				updates=1
-			else
-				echo "Magisk:		no new commits!"
+#			else
+#				echo "Magisk:		no new commits!"
 			fi
 			if [ -n "$rebuild" ]; then
 				if [ -z "$1" ] && ! git -C MagiskManager ${CMP}; then
-					echo "MagiskManager:	new commits found!"
-					git -C MagiskManager fetch >/dev/null 2>&1
-					git -C MagiskManager reset --hard origin/master >/dev/null 2>&1
-					git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1
-					git -C MagiskManager submodule update --recursive >/dev/null 2>&1
+					echo -e -n "Updating MagiskManager...			" && s=0
+					git -C MagiskManager fetch >/dev/null 2>&1 || s=1
+					git -C MagiskManager reset --hard origin/master >/dev/null 2>&1 || s=1
+					git -C MagiskManager pull --recurse-submodules >/dev/null 2>&1 || s=1
+					git -C MagiskManager submodule update --recursive >/dev/null 2>&1 || s=1
+					[ "$s" -eq "0" ] && ok || fail
 				fi
 				echo -e -n "Editing  MagiskManager files...			" && edit_magiskman_files && ok || fail
 				echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
@@ -154,8 +156,8 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 				git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 				updates=1			
-			else
-				echo "MagiskManager:	no new commits!"
+#			else
+#				echo "MagiskManager:	no new commits!"
 			fi
 	
 			if [ -n "$updates" ]; then
