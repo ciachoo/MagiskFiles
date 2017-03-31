@@ -6,7 +6,7 @@ export GIT_MERGE_AUTOEDIT=no
 # APKFILE=app-release-unsigned.apk
 APKFILE=app-debug.apk
 CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
-MAGISKVER='12'
+MAGISKVER='13'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
 [[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed -i ''" || repl_command="sed -i"
@@ -150,7 +150,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				fi
 				echo -e -n "Editing  MagiskManager files...			" && edit_magiskman_files && ok || fail
 				echo -e -n "Building MagiskManager-v${MAGISKMANVER}-${suffix}.apk...	"
-				(cd MagiskManager; ./gradlew clean >/dev/null 2>&1; ./gradlew init >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false $gradle_param >/dev/null 2>&1;)
+				(cd MagiskManager; ./gradlew clean -Dorg.gradle.daemon=false >/dev/null 2>&1; ./gradlew build -x lint -Dorg.gradle.daemon=false $gradle_param >/dev/null 2>&1;)
 				[ -f MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; signapp; } || fail
 				git -C MagiskManager reset --hard HEAD >/dev/null 2>&1
 				updates=1			
