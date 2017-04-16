@@ -141,13 +141,13 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 	#				git -C Magisk submodule update --recursive --remote || s=1
 					[ "$s" -eq "0" ] && ok || fail
 				fi
-				echo -e -n "Editing  Magisk files...			" && edit_magisk_files && ok || fail
+				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
 				(cd Magisk; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 				updates=1
-				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1; edit_magisk_files && ok || fail
+				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-UD-v${MAGISKVER}-${suffix}.zip...		"
 				(cd Magisk; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-UD-v${MAGISKVER}-${suffix}.zip; } || fail
