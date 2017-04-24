@@ -109,11 +109,11 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 			echo -e -n ".DS_Store\nMagisk\nMagiskManager\n" >> .git/info/exclude
 			rm -rf Magisk >/dev/null 2>&1
 			git clone --recursive -j8 https://github.com/topjohnwu/Magisk.git
-			git -C Magisk fetch origin unify_daemon
-			git -C Magisk checkout --track origin/unify_daemon
-			git -C Magisk pull --recurse-submodules
-			git -C Magisk submodule update --recursive
-			git -C Magisk checkout master
+#			git -C Magisk fetch origin unify_daemon
+#			git -C Magisk checkout --track origin/unify_daemon
+#			git -C Magisk pull --recurse-submodules
+#			git -C Magisk submodule update --recursive
+#			git -C Magisk checkout master
 			rm -rf MagiskManager >/dev/null 2>&1
 			git clone https://github.com/topjohnwu/MagiskManager.git
 			;;
@@ -134,10 +134,10 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 					git -C Magisk reset --hard origin/master >/dev/null 2>&1 || s=1
 					git -C Magisk pull --recurse-submodules >/dev/null 2>&1 || s=1
 					git -C Magisk submodule update --recursive >/dev/null 2>&1 || s=1
-					git -C Magisk checkout unify_daemon >/dev/null 2>&1 || s=1
-					git -C Magisk pull --recurse-submodules >/dev/null 2>&1 || s=1
-					git -C Magisk submodule update --recursive >/dev/null 2>&1 || s=1
-					git -C Magisk checkout master >/dev/null 2>&1 || s=1
+#					git -C Magisk checkout unify_daemon >/dev/null 2>&1 || s=1
+#					git -C Magisk pull --recurse-submodules >/dev/null 2>&1 || s=1
+#					git -C Magisk submodule update --recursive >/dev/null 2>&1 || s=1
+#					git -C Magisk checkout master >/dev/null 2>&1 || s=1
 	#				git -C Magisk submodule update --recursive --remote || s=1
 					[ "$s" -eq "0" ] && ok || fail
 				fi
@@ -146,12 +146,12 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
-				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1 && edit_magisk_files && ok || fail
-				echo -e -n "Building Magisk-UD-v${MAGISKVER}-${suffix}.zip...		"
-				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
-				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-UD-v${MAGISKVER}-${suffix}.zip; } || fail
-				git -C Magisk reset --hard HEAD >/dev/null 2>&1
-				git -C Magisk checkout master >/dev/null 2>&1
+#				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1 && edit_magisk_files && ok || fail
+#				echo -e -n "Building Magisk-UD-v${MAGISKVER}-${suffix}.zip...		"
+#				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
+#				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-UD-v${MAGISKVER}-${suffix}.zip; } || fail
+#				git -C Magisk reset --hard HEAD >/dev/null 2>&1
+#				git -C Magisk checkout master >/dev/null 2>&1
 				updates=1
 #			else
 #				echo "Magisk:		no new commits!"
