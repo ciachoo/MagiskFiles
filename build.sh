@@ -143,8 +143,8 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				fi
 				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${MAGISKVER} ${suffix})
-				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
+				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${MAGISKVER} ${suffix} >/dev/null 2>&1;)
+				[ -f Magisk/Magisk-v${MAGISKVER}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 #				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1 && edit_magisk_files && ok || fail
 #				echo -e -n "Building Magisk-UD-v${MAGISKVER}-${suffix}.zip...		"
