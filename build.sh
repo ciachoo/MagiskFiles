@@ -22,11 +22,9 @@ $repl_command "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManag
 
 
 edit_magisk_files() { 
-$repl_command "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/enable && \
-$repl_command "s/.*ps |/\$TOOLPATH\/ps |/" Magisk/zip_static/common/magiskhide/disable && \
-$repl_command "s|\$\"DUMMDIR|\"\$DUMMDIR|" Magisk/scripts/magic_mask.sh && \
-$repl_command "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
-$repl_command "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; }
+#$repl_command "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
+#$repl_command "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; 
+}
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
 
@@ -143,8 +141,8 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				fi
 				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${MAGISKVER} ${suffix} >/dev/null 2>&1;)
-				[ -f Magisk/Magisk-v${MAGISKVER}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
+				(cd Magisk; git pull --recurse-submodules >/dev/null 2>&1; git submodule update --recursive >/dev/null 2>&1; ./build.sh all ${suffix} >/dev/null 2>&1;)
+				[ -f Magisk/Magisk-v${suffix}.zip ] && { ok; mv Magisk/Magisk-v${suffix}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 #				echo -e -n "Editing  Magisk (UD) files...			" && git -C Magisk checkout unify_daemon >/dev/null 2>&1 && edit_magisk_files && ok || fail
 #				echo -e -n "Building Magisk-UD-v${MAGISKVER}-${suffix}.zip...		"
