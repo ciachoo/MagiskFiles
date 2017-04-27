@@ -24,6 +24,7 @@ $repl_command "s/showthread.php?t=3432382/showthread.php?t=3521901/" MagiskManag
 edit_magisk_files() { 
 #$repl_command "s/sh \$MOD\/\$1.sh.*/sh \$MOD\/\$1.sh \&/" Magisk/scripts/magic_mask.sh && \
 #$repl_command "s/sh \$SCRIPT.*/sh \$SCRIPT \&/" Magisk/scripts/magic_mask.sh && return 0 || return 1; 
+return 0
 }
 
 # https://raw.githubusercontent.com/topjohnwu/MagiskManager/updates/magisk_update.json
