@@ -9,7 +9,8 @@ CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
 MAGISKVER='13'
 MAGISKMANVER='5.0'
 suffix="$(date +%y%m%d)"
-verCode="${suffix: -3}"
+#verCode="${suffix: -3}"
+verCode="${suffix}"
 [[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed -i ''" || repl_command="sed -i"
 [[ "$(uname -a)" =~ "Darwin" ]] && gradle_param="-Dorg.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home"
 
