@@ -42,6 +42,7 @@ cat << EOF > updates/magisk_update.json
     "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
+    "version": "${MAGISKVER}.${suffix}",
     "versionCode": "${suffix}",
     "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${suffix}.zip",
     "changelog": "Check the link",

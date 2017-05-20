@@ -6,6 +6,7 @@
     "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
+    "version": "13.170520",
     "versionCode": "170520",
     "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v13-170520.zip",
     "changelog": "Check the link",
