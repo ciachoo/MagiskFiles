@@ -145,8 +145,8 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				fi
 				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk-v${MAGISKVER}-${suffix}.zip...		"
-				(cd Magisk; ./build.sh all ${MAGISKVER} ${verCode} >/dev/null 2>&1;)
-				[ -f Magisk/Magisk-v${MAGISKVER}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
+				(cd Magisk; ./build.sh clean >/dev/null 2>&1; ./build.sh all ${MAGISKVER}.${verCode} ${verCode} >/dev/null 2>&1;)
+				[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.${verCode}.zip Magisk-v${MAGISKVER}-${suffix}.zip; } || fail
 				echo -e -n "Building Magisk-uninstaller-${suffix}.zip...	"
 				(cd Magisk; ./build.sh uninstaller >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-uninstaller-20${suffix}.zip ] && { ok; mv Magisk/Magisk-uninstaller-20${suffix}.zip Magisk-v${MAGISKVER}-${suffix}-Uninstaller.zip; } || fail
