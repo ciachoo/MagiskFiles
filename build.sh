@@ -43,14 +43,14 @@ cat << EOF > updates/magisk_update.json
   },
   "magisk": {
     "version": "${MAGISKVER}.${suffix}",
-    "versionCode": "${suffix}",
+    "versionCode": "130",
     "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${suffix}.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "uninstall": {
-    "filename": "Magisk-uninstaller-20170206.zip",
-    "link": "http://tiny.cc/latestuninstaller"
+    "filename": "Magisk-v${MAGISKVER}-${suffix}-Uninstaller.zip",
+    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${suffix}-Uninstaller.zip"
   }
 }
 EOF
