@@ -120,12 +120,12 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				echo -e -n "Building Magisk and Magisk Manager...		"
 				(cd Magisk; ./build.py clean >/dev/null 2>&1; ./build.py all ${MAGISKVER}.${verCode} ${verCode} >/dev/null 2>&1;)
 				[[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip && -f Magisk/Magisk-uninstaller-20${verCode}.zip && -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ]] && ok || fail
-				echo -e -n "Moving Magisk-v${MAGISKVER}-${verCode}.zip...			"
+				echo -e -n "Moving   Magisk-v${MAGISKVER}-${verCode}.zip...			"
 				[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.${verCode}.zip Magisk-v${MAGISKVER}-${verCode}.zip; } || fail
-				echo -e -n "Moving Magisk-uninstaller-${verCode}.zip...		"
+				echo -e -n "Moving   Magisk-uninstaller-${verCode}.zip...		"
 				(cd Magisk; ./build.sh uninstaller >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-uninstaller-20${verCode}.zip ] && { ok; mv Magisk/Magisk-uninstaller-20${verCode}.zip Magisk-v${MAGISKVER}-${verCode}-Uninstaller.zip; } || fail
-				echo -e -n "Moving MagiskManager-v${MAGISKMANVER}-${verCode}.apk...		"
+				echo -e -n "Moving   MagiskManager-v${MAGISKMANVER}-${verCode}.apk...		"
 				[ -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; mv Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${verCode}.apk; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 				updates=1
