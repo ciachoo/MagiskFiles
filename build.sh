@@ -117,9 +117,9 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 					[ "$s" -eq "0" ] && ok || fail
 				fi
 				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
-				echo -e -n "Building Magisk and Magisk Manager 				"
-				[[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip && -f Magisk/Magisk-uninstaller-20${verCode}.zip && -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ]] && ok || fail
+				echo -e -n "Building Magisk and Magisk Manager 		"
 				(cd Magisk; ./build.py clean >/dev/null 2>&1; ./build.py all ${MAGISKVER}.${verCode} ${verCode} >/dev/null 2>&1;)
+				[[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip && -f Magisk/Magisk-uninstaller-20${verCode}.zip && -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ]] && ok || fail
 				echo -e -n "Moving Magisk-v${MAGISKVER}-${verCode}.zip...			"
 				[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.${verCode}.zip Magisk-v${MAGISKVER}-${verCode}.zip; } || fail
 				echo -e -n "Moving Magisk-uninstaller-${verCode}.zip...		"
