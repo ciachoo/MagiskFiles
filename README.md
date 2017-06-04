@@ -2,7 +2,7 @@
 
 ## How to build
 ```
-git checkout git@github.com:stangri/MagiskFiles.git
+git clone git@github.com:stangri/MagiskFiles.git
 cd MagiskFiles
 ./build.sh setup
 ./build.sh force
