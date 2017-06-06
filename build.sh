@@ -7,6 +7,7 @@ export JAVA_HOME=$(/usr/libexec/java_home)
 APKFILE='app-debug.apk'
 CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
 MAGISKVER='13'
+MAGISKMANVER='5.0'
 verCode="$(date +%y%m%d)"
 [[ "$(uname -a)" =~ "Darwin" ]] && repl_command="sed -i ''" || repl_command="sed -i"
 
