@@ -6,14 +6,14 @@
     "changelog": "  - Upgrade on Play Store!"
   },
   "magisk": {
-    "version": "13.170606",
+    "version": "13.170611",
     "versionCode": "130",
-    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v13-170606.zip",
+    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v13-170611.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "uninstall": {
-    "filename": "Magisk-v13-170606-Uninstaller.zip",
-    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v13-170606-Uninstaller.zip"
+    "filename": "Magisk-v13-170611-Uninstaller.zip",
+    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v13-170611-Uninstaller.zip"
   }
 }
