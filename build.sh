@@ -2,7 +2,7 @@
 
 export GIT_EDITOR=true
 export GIT_MERGE_AUTOEDIT=no
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=/etc/java-config-2/current-system-vm/bin/
 
 APKFILE='app-debug.apk'
 CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
@@ -140,7 +140,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 			;;
 	esac
 	
-	end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
-	echo -e -n "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
+	end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l | sed "s/\./,/g"); secs=$(printf %.f $runtime);
+	echo -e "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
 	
 fi
