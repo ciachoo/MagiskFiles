@@ -15,7 +15,7 @@ ok() { echo -e '\033[0;32m[\xe2\x9c\x93]\033[0m'; }
 fail() { echo -e '\033[0;31m[\xe2\x9c\x97]\033[0m'; }
 
 edit_magisk_files() { 
-$repl_command "s|topjohnwu/MagiskManager/update/|stangri/MagiskFiles/master/updates/|" Magisk/MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
+$repl_command "s|topjohnwu/MagiskManager/update/|ciachoo/MagiskFiles/master/updates/|" Magisk/MagiskManager/app/src/main/java/com/topjohnwu/magisk/asyncs/CheckUpdates.java && \
 $repl_command "s/versionName \".*\"/versionName \"${MAGISKMANVER}.${verCode}\"/" Magisk/MagiskManager/app/build.gradle && \
 $repl_command "s/showthread.php?t=3432382/showthread.php?t=3521901/" Magisk/MagiskManager/app/src/main/java/com/topjohnwu/magisk/AboutActivity.java && return 0 || return 1; }
 
