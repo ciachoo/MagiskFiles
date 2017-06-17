@@ -55,9 +55,9 @@ EOF
 
 signapp() {
 	echo -n "Signing  MagiskManager-v${MAGISKMANVER}-${verCode}.apk...	"
-	if [ -f MagiskManager/app/build/outputs/apk/${APKFILE} ]; then
-		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${verCode}.apk
-		rm -f MagiskManager/app/build/outputs/apk/${APKFILE}
+	if [ -f MagiskManager/app/build/outputs/apk/debug/${APKFILE} ]; then
+		java -jar Java/signapk.jar MagiskManager/app/src/main/assets/public.certificate.x509.pem MagiskManager/app/src/main/assets/private.key.pk8 MagiskManager/app/build/outputs/apk/debug/${APKFILE} MagiskManager-v${MAGISKMANVER}-${verCode}.apk
+		rm -f MagiskManager/app/build/outputs/apk/debug/${APKFILE}
 		ok
 	else
 		fail
@@ -120,14 +120,14 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 				echo -e -n "Editing  Magisk files...			" && git -C Magisk checkout master >/dev/null 2>&1 && edit_magisk_files && ok || fail
 				echo -e -n "Building Magisk and Magisk Manager...		"
 				(cd Magisk; ./build.py clean >/dev/null 2>&1; ./build.py all ${MAGISKVER}.${verCode} ${verCode} >/dev/null 2>&1;)
-				[[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip && -f Magisk/Magisk-uninstaller-20${verCode}.zip && -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ]] && ok || fail
+				[[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip && -f Magisk/Magisk-uninstaller-20${verCode}.zip && -f Magisk/MagiskManager/app/build/outputs/apk/debug/${APKFILE} ]] && ok || fail
 				echo -e -n "Moving   Magisk-v${MAGISKVER}-${verCode}.zip...		"
 				[ -f Magisk/Magisk-v${MAGISKVER}.${verCode}.zip ] && { ok; mv Magisk/Magisk-v${MAGISKVER}.${verCode}.zip Magisk-v${MAGISKVER}-${verCode}.zip; } || fail
 				echo -e -n "Moving   Magisk-uninstaller-${verCode}.zip...	"
 				(cd Magisk; ./build.sh uninstaller >/dev/null 2>&1;)
 				[ -f Magisk/Magisk-uninstaller-20${verCode}.zip ] && { ok; mv Magisk/Magisk-uninstaller-20${verCode}.zip Magisk-v${MAGISKVER}-${verCode}-Uninstaller.zip; } || fail
 				echo -e -n "Moving   MagiskManager-v${MAGISKMANVER}-${verCode}.apk...	"
-				[ -f Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} ] && { ok; mv Magisk/MagiskManager/app/build/outputs/apk/${APKFILE} MagiskManager-v${MAGISKMANVER}-${verCode}.apk; } || fail
+				[ -f Magisk/MagiskManager/app/build/outputs/apk/debug/${APKFILE} ] && { ok; mv Magisk/MagiskManager/app/build/outputs/apk/debug/${APKFILE} MagiskManager-v${MAGISKMANVER}-${verCode}.apk; } || fail
 				git -C Magisk reset --hard HEAD >/dev/null 2>&1
 				updates=1
 			fi
