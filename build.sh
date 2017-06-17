@@ -2,7 +2,7 @@
 
 export GIT_EDITOR=true
 export GIT_MERGE_AUTOEDIT=no
-export JAVA_HOME=/etc/java-config-2/current-system-vm/bin/
+export JAVA_HOME=/opt/oracle-jdk-bin-1.8.0.131/
 
 APKFILE='app-debug.apk'
 CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
