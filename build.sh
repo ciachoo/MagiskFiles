@@ -32,13 +32,13 @@ cat << EOF > updates/magisk_update.json
   "magisk": {
     "version": "${MAGISKVER}.${verCode}",
     "versionCode": "130",
-    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${verCode}.zip",
+    "link": "https://raw.githubusercontent.com/ciachoo/MagiskFiles/master/Magisk-v${MAGISKVER}-${verCode}.zip",
     "changelog": "Check the link",
     "note": "https://forum.xda-developers.com/showthread.php?t=3521901"
   },
   "uninstall": {
     "filename": "Magisk-v${MAGISKVER}-${verCode}-Uninstaller.zip",
-    "link": "https://raw.githubusercontent.com/stangri/MagiskFiles/master/Magisk-v${MAGISKVER}-${verCode}-Uninstaller.zip"
+    "link": "https://raw.githubusercontent.com/ciachoo/MagiskFiles/master/Magisk-v${MAGISKVER}-${verCode}-Uninstaller.zip"
   }
 }
 EOF
@@ -48,7 +48,7 @@ EOF
 cat << EOF > updates/magisk_manager_update.txt
 lastest_version=${verCode}
 apk_file=MagiskManager-v${MAGISKMANVER}-${verCode}.apk
-download_url=https://raw.githubusercontent.com/stangri/MagiskFiles/master/\$apk_file
+download_url=https://raw.githubusercontent.com/ciachoo/MagiskFiles/master/\$apk_file
 EOF
 	fi
 }
@@ -134,7 +134,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 	
 			if [ -n "$updates" ]; then
 				echo -e -n "Updating update files...			" && update_updates && ok || fail
-				echo -e -n "Pushing new files to github.com/stangri...	"
+				echo -e -n "Pushing new files to github.com/ciachoo...	"
 				git add . && git commit -m "$verCode build" >/dev/null 2>&1 && git push origin >/dev/null 2>&1 && ok || fail
 			fi
 			;;
