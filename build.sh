@@ -3,6 +3,7 @@
 export GIT_EDITOR=true
 export GIT_MERGE_AUTOEDIT=no
 export JAVA_HOME=/opt/oracle-jdk-bin-1.8.0.131/
+export LC_ALL=en_US.UTF-8
 
 APKFILE='app-debug.apk'
 CMP="diff --quiet --ignore-submodules=dirty @{upstream}"
@@ -140,7 +141,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 			;;
 	esac
 	
-	end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l | sed "s/\./,/g"); secs=$(printf %.f $runtime);
+	end=`date +%s.%N`; runtime=$(echo "${end%.N} - ${start%.N}" | bc -l); secs=$(printf %.f $runtime);
 	echo -e "Total running time: $(printf '%02dh:%02dm:%02ds\n\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))"
-	
+	export LC_ALL=pl_PL.utf8
 fi
