@@ -2,7 +2,7 @@
 
 export GIT_EDITOR=true
 export GIT_MERGE_AUTOEDIT=no
-export JAVA_HOME=/opt/oracle-jdk-bin-1.8.0.131/
+export JAVA_HOME=/usr/lib/jvm/oracle-jdk-bin-1.8/
 export LC_ALL_BACK=$LC_ALL
 export LC_ALL=en_US.UTF-8
 
